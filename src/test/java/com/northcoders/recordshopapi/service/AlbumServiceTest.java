@@ -64,4 +64,16 @@ public class AlbumServiceTest {
 
     }
 
+    @Test
+    public void getAlbumByInvalidIdTest() {
+
+        when(mockAlbumRepository.findById(7L)).thenReturn(Optional.empty());
+
+        var actualAlbum = albumsServiceImpl.getAlbumById(7);
+
+        assertThat(actualAlbum).isNull();
+
+
+    }
+
 }
