@@ -84,6 +84,22 @@ public class AlbumControllerTest {
     }
 
 
+    @Test
+    @DisplayName("GET /albums/{id}")
+    public void testGetAlbumById() throws Exception {
 
+        //ARRANGE
+       Album album =  new Album(1L,"The Wind", "John Doe", Genre.SOUL, LocalDate.of(1999,12,12),9000,5);
+
+        when(albumServiceImpl.getAlbumById(1)).thenReturn(album);
+        //ACT
+        this.mockMvcController.perform(MockMvcRequestBuilders.get("/api/v1/albums/1"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.albumId").value(1))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.genre").value(Genre.SOUL.name()));
+
+        //ASSERT
+
+    }
 
 }

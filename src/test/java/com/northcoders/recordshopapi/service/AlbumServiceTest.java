@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -46,6 +47,20 @@ public class AlbumServiceTest {
         assertThat(albums).isNotNull();
         assertThat(albums).hasSize(4);
 
+
+    }
+
+    @Test
+    public void getAlbumByIdTest() {
+
+       Album album = new Album(1L,"The Wind", "John Doe", Genre.SOUL, LocalDate.of(1999,12,12),9000,5);
+        when(mockAlbumRepository.findById(1L)).thenReturn(Optional.of(album));
+
+        var actualAlbum = albumsServiceImpl.getAlbumById(1);
+
+        assertThat(actualAlbum).isNotNull();
+        assertThat(actualAlbum.getAlbumId()).isEqualTo(1);
+        assertThat(actualAlbum.getStockQuantity()).isEqualTo(5);
 
     }
 

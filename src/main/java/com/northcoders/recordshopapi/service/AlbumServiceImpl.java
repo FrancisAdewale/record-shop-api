@@ -23,7 +23,10 @@ public class AlbumServiceImpl implements AlbumService{
         List<Album> albums = (List<Album>) albumRepository.findAll();
         albums.stream().filter(a-> a.getStockQuantity() > 0).forEach(returnList::add);
         return returnList;
+    }
 
-
+    @Override
+    public Album getAlbumById(long id) {
+     return albumRepository.findById(id).orElseThrow();
     }
 }
