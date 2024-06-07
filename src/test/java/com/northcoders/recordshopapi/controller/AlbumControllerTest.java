@@ -21,6 +21,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -53,7 +54,6 @@ public class AlbumControllerTest {
     @DisplayName("GET /albums")
     public void testGetAllAlbums() throws Exception {
 
-
         //ARRANGE
 
         List<Album> albumsList = new ArrayList<>();
@@ -69,10 +69,21 @@ public class AlbumControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].albumId").value(1))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].genre").value(Genre.SOUL.name()));
 
-
         //ASSERT
 
     }
+
+    @Test
+    public void testEmptyResponse() throws Exception {
+
+        when(albumServiceImpl.getAllAlbums()).thenReturn(Collections.emptyList());
+
+        this.mockMvcController.perform(MockMvcRequestBuilders.get("/api/v1/albums"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().json("[]"));
+    }
+
+
 
 
 }
