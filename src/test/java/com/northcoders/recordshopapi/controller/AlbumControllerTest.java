@@ -48,7 +48,7 @@ public class AlbumControllerTest {
 
 
     @Test
-    @DisplayName("GET /albums")
+    @DisplayName("GET /albums?includeNonStock=false")
     public void testGetAllAlbums() throws Exception {
 
         //ARRANGE
@@ -64,10 +64,32 @@ public class AlbumControllerTest {
         this.mockMvcController.perform(MockMvcRequestBuilders.get("/api/v1/albums").param("includeNonStock","false"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].albumId").value(1))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].genre").value(Genre.SOUL.name()));
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].genre").value(Genre.SOUL.name()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[4].id").doesNotExist());
 
         //ASSERT
 
+    }
+
+    @Test
+    @DisplayName("GET /albums?includeNonStock=true")
+    public void testGetAllAlbumsIncludeNonStock() throws Exception {
+        // ARRANGE
+        List<Album> albumsList = new ArrayList<>();
+        albumsList.add(new Album(1L,"The Wind", "John Doe", Genre.SOUL, LocalDate.of(1999,12,12),9000,5));
+        albumsList.add(new Album(2L,"The Wind2", "John Doe", Genre.SOUL, LocalDate.of(1999,12,12),9000,5));
+        albumsList.add(new Album(3L,"The Wind3", "John Doe", Genre.SOUL, LocalDate.of(1999,12,12),9000,5));
+        albumsList.add(new Album(4L,"The Wind4", "John Doe", Genre.SOUL, LocalDate.of(1999,12,12),9000,5));
+        albumsList.add(new Album(5L,"The Wind5", "John Doe", Genre.SOUL, LocalDate.of(1999,12,12),9000,0));
+        when(albumServiceImpl.getAllAlbums(true)).thenReturn(albumsList);
+
+        // ACT & ASSERT
+        this.mockMvcController.perform(MockMvcRequestBuilders.get("/api/v1/albums")
+                        .param("includeNonStock", "true"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].albumId").value(1))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[4].albumId").value(5))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[4].stockQuantity").value(0));
     }
 
     @Test
@@ -112,6 +134,27 @@ public class AlbumControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().string(""));
 
+
+        //ASSERT
+
+    }
+
+    @Test
+    @DisplayName("GET /albums")
+    public void testGetAllAlbumsWithoutParam() throws Exception {
+
+        //ARRANGE
+
+        List<Album> albumsList = new ArrayList<>();
+        albumsList.add(new Album(1L,"The Wind", "John Doe", Genre.SOUL, LocalDate.of(1999,12,12),9000,5));
+        albumsList.add(new Album(2L,"The Wind2", "John Doe", Genre.SOUL, LocalDate.of(1999,12,12),9000,5));
+        albumsList.add(new Album(3L,"The Wind3", "John Doe", Genre.SOUL, LocalDate.of(1999,12,12),9000,5));
+        albumsList.add(new Album(4L,"The Wind4", "John Doe", Genre.SOUL, LocalDate.of(1999,12,12),9000,5));
+        albumsList.add(new Album(5L,"The Wind5", "John Doe", Genre.SOUL, LocalDate.of(1999,12,12),9000,0));
+        when(albumServiceImpl.getAllAlbums(false)).thenReturn(albumsList);
+        //ACT
+        this.mockMvcController.perform(MockMvcRequestBuilders.get("/api/v1/albums"))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
 
         //ASSERT
 
