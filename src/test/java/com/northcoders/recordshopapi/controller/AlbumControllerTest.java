@@ -160,4 +160,22 @@ public class AlbumControllerTest {
 
     }
 
+    @Test
+    @DisplayName("GET /artist?name={}")
+    public void testGetAllAlbumsByArtist() throws Exception {
+
+        //ARRANGE
+        List<Album> mikeAlbums = new ArrayList<>();
+        mikeAlbums.add(new Album(3L, "The Wind3", "Mike", Genre.SOUL, LocalDate.of(1999, 12, 12), 9000, 5));
+
+        when(albumServiceImpl.getAllAlbumsByArtist("Mike")).thenReturn(mikeAlbums);
+        //ACT
+        this.mockMvcController.perform(MockMvcRequestBuilders.get("/api/v1/albums/artist").param("name","Mike"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].artistName").value("Mike"));
+
+        //ASSERT
+
+    }
+
 }
