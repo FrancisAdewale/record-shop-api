@@ -18,11 +18,17 @@ public class AlbumServiceImpl implements AlbumService{
 
 
     @Override
-    public List<Album> getAllAlbums() {
-        List<Album> returnList = new ArrayList<>();
-        List<Album> albums = (List<Album>) albumRepository.findAll();
-        albums.stream().filter(a-> a.getStockQuantity() > 0).forEach(returnList::add);
-        return returnList;
+    public List<Album> getAllAlbums(boolean includeNonStock) {
+
+        if(includeNonStock) {
+            return (List<Album>) albumRepository.findAll();
+        } else {
+            List<Album> returnList = new ArrayList<>();
+            List<Album> albums = (List<Album>) albumRepository.findAll();
+            albums.stream().filter(a-> a.getStockQuantity() > 0).forEach(returnList::add);
+            return returnList;
+        }
+
     }
 
     @Override

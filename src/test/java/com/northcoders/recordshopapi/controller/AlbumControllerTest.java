@@ -59,7 +59,7 @@ public class AlbumControllerTest {
         albumsList.add(new Album(3L,"The Wind3", "John Doe", Genre.SOUL, LocalDate.of(1999,12,12),9000,5));
         albumsList.add(new Album(4L,"The Wind4", "John Doe", Genre.SOUL, LocalDate.of(1999,12,12),9000,5));
         albumsList.add(new Album(5L,"The Wind5", "John Doe", Genre.SOUL, LocalDate.of(1999,12,12),9000,0));
-        when(albumServiceImpl.getAllAlbums()).thenReturn(albumsList);
+        when(albumServiceImpl.getAllAlbums(false)).thenReturn(albumsList);
         //ACT
         this.mockMvcController.perform(MockMvcRequestBuilders.get("/api/v1/albums"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -73,7 +73,7 @@ public class AlbumControllerTest {
     @Test
     public void testEmptyResponse() throws Exception {
 
-        when(albumServiceImpl.getAllAlbums()).thenReturn(Collections.emptyList());
+        when(albumServiceImpl.getAllAlbums(false)).thenReturn(Collections.emptyList());
 
         this.mockMvcController.perform(MockMvcRequestBuilders.get("/api/v1/albums"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
