@@ -20,10 +20,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static org.mockito.Mockito.when;
 
@@ -97,6 +94,24 @@ public class AlbumControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.albumId").value(1))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.genre").value(Genre.SOUL.name()));
+
+        //ASSERT
+
+    }
+
+    @Test
+    @DisplayName("GET /albums/{id}")
+    public void testGetAlbumByWrongId() throws Exception {
+
+        //ARRANGE
+        Album album =  new Album(1L,"The Wind", "John Doe", Genre.SOUL, LocalDate.of(1999,12,12),9000,5);
+
+        when(albumServiceImpl.getAlbumById(7)).thenReturn(null);
+        //ACT
+        this.mockMvcController.perform(MockMvcRequestBuilders.get("/api/v1/albums/7"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().string(""));
+
 
         //ASSERT
 
