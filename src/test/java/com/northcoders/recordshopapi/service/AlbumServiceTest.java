@@ -39,10 +39,11 @@ public class AlbumServiceTest {
         albumsList.add(new Album(2L,"The Wind2", "John Doe", Genre.SOUL, LocalDate.of(1999,12,12),9000,5));
         albumsList.add(new Album(3L,"The Wind3", "John Doe", Genre.SOUL, LocalDate.of(1999,12,12),9000,5));
         albumsList.add(new Album(4L,"The Wind4", "John Doe", Genre.SOUL, LocalDate.of(1999,12,12),9000,5));
+        albumsList.add(new Album(4L,"The Wind4", "John Doe", Genre.SOUL, LocalDate.of(1999,12,12),9000,0));
 
         when(mockAlbumRepository.findAll()).thenReturn(albumsList);
 
-        var albums = albumsServiceImpl.getAllAlbums();
+        var albums = albumsServiceImpl.getAllAlbums(false);
 
         assertThat(albums).isNotNull();
         assertThat(albums).hasSize(4);

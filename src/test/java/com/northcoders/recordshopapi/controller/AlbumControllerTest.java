@@ -61,7 +61,7 @@ public class AlbumControllerTest {
         albumsList.add(new Album(5L,"The Wind5", "John Doe", Genre.SOUL, LocalDate.of(1999,12,12),9000,0));
         when(albumServiceImpl.getAllAlbums(false)).thenReturn(albumsList);
         //ACT
-        this.mockMvcController.perform(MockMvcRequestBuilders.get("/api/v1/albums"))
+        this.mockMvcController.perform(MockMvcRequestBuilders.get("/api/v1/albums").param("includeNonStock","false"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].albumId").value(1))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].genre").value(Genre.SOUL.name()));
@@ -75,7 +75,7 @@ public class AlbumControllerTest {
 
         when(albumServiceImpl.getAllAlbums(false)).thenReturn(Collections.emptyList());
 
-        this.mockMvcController.perform(MockMvcRequestBuilders.get("/api/v1/albums"))
+        this.mockMvcController.perform(MockMvcRequestBuilders.get("/api/v1/albums").param("includeNonStock","false"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().json("[]"));
     }
