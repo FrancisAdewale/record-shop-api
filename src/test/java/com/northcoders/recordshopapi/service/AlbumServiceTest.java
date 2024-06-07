@@ -77,4 +77,19 @@ public class AlbumServiceTest {
 
     }
 
+    @Test
+    public void getAllAlbumsByArtistNameTest() {
+
+
+        List<Album> mikeAlbums = new ArrayList<>();
+        mikeAlbums.add(new Album(3L, "The Wind3", "Mike", Genre.SOUL, LocalDate.of(1999, 12, 12), 9000, 5));
+        when(mockAlbumRepository.findByArtistName("Mike")).thenReturn(mikeAlbums);
+
+        var actualResult = albumsServiceImpl.getAllAlbumsByArtist("Mike");
+
+        assertThat(actualResult).hasSize(1);
+
+
+    }
+
 }

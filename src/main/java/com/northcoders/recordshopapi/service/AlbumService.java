@@ -9,4 +9,5 @@ public interface AlbumService {
 
     List<Album> getAllAlbums(boolean includeNonStock);
     Album getAlbumById(long id);
+    List<Album> getAllAlbumsByArtist(String name);
 }

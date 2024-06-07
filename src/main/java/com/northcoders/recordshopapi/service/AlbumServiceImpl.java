@@ -38,4 +38,9 @@ public class AlbumServiceImpl implements AlbumService{
         }
      return null;
     }
+
+    @Override
+    public List<Album> getAllAlbumsByArtist(String name) {
+        return albumRepository.findByArtistName(name);
+    }
 }
