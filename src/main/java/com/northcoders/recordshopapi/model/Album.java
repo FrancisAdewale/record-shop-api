@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
 @Entity
+@Table(name = "records")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,26 +19,27 @@ public class Album {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(updatable = false, nullable = false)
+    @Column( name = "album_id", updatable = false, nullable = false)
     Long albumId;
 
-    @Column
+    @Column(name = "album_title")
     String albumTitle;
 
 
-    @Column
+    @Column(name = "artist_name")
     String artistName;
 
     @Column
+    @Enumerated(EnumType.STRING)
     Genre genre;
 
-    @Column
+    @Column(name = "release_date")
     LocalDate releaseDate;
 
-    @Column
+    @Column(name = "price")
     int price;
 
-    @Column
+    @Column(name = "stock_quantity")
     int stockQuantity;
 
 
