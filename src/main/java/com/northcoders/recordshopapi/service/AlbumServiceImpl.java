@@ -1,7 +1,6 @@
 package com.northcoders.recordshopapi.service;
 
 import com.northcoders.recordshopapi.exception.AlbumNotFoundException;
-import com.northcoders.recordshopapi.exception.ArtistNotFoundException;
 import com.northcoders.recordshopapi.model.Album;
 import com.northcoders.recordshopapi.Genre;
 import com.northcoders.recordshopapi.repo.AlbumRepository;
@@ -21,6 +20,7 @@ public class AlbumServiceImpl implements AlbumService{
 
     @Override
     public List<Album> getAllAlbums(boolean includeNonStock) {
+
 
         if(includeNonStock) {
             return (List<Album>) albumRepository.findAll();
@@ -47,16 +47,14 @@ public class AlbumServiceImpl implements AlbumService{
 
     @Override
     public List<Album> getAllAlbumsByGenre(Genre genre) {
-        return albumRepository.findAllByGenre(genre);
+        return albumRepository.findAllByGenre(genre).get();
     }
 
     @Override
     public Album getAlbumByName(String albumName) {
-        if(albumRepository.findByAlbumTitle(albumName).isPresent())  {
-            return albumRepository.findByAlbumTitle(albumName).get();
+            return albumRepository.findByAlbumTitle(albumName)
+                    .orElseThrow(() -> new AlbumNotFoundException("Can't find album name: " + albumName));
 
-        }
-        return null;
     }
 
     @Override
@@ -70,8 +68,9 @@ public class AlbumServiceImpl implements AlbumService{
         if(album.isPresent()) {
             albumRepository.deleteById(id);
             return "Album deleted";
+        } else {
+            throw new AlbumNotFoundException("Can't find album Id: " + id);
         }
 
-        return "Album does not exist";
     }
 }

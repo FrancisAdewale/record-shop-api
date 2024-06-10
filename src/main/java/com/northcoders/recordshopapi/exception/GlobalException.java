@@ -33,4 +33,5 @@ public class GlobalException {
         return new ResponseEntity<ErrorMessage>(message, HttpStatus.NOT_FOUND);
     }
 
+
 }

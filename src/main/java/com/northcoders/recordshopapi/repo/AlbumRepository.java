@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface AlbumRepository extends CrudRepository<Album,Long> {
     Optional<List<Album>> findByArtistName(String artistName);
-    List<Album> findAllByGenre(Genre genre);
+    Optional<List<Album>> findAllByGenre(Genre genre);
     Optional<Album> findByAlbumTitle(String title);
 
 }

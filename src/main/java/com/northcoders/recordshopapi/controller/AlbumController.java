@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -18,7 +19,7 @@ public class AlbumController {
     AlbumService albumService;
 
     @GetMapping("/albums")
-    public ResponseEntity<List<Album>> getAllAlbums(@RequestParam(name = "includeNonStock") boolean includeNonStock) {
+    public ResponseEntity<List<Album>> getAllAlbums(@RequestParam(required = false , name = "includeNonStock") boolean includeNonStock) {
         return new ResponseEntity<>(albumService.getAllAlbums(includeNonStock), HttpStatus.OK);
     }
 
@@ -33,13 +34,13 @@ public class AlbumController {
     }
 
     @GetMapping("/albums/genre")
-    public ResponseEntity<List<Album>> getAllAlbumsByYear(@RequestParam(name = "name") Genre genre ) {
+    public ResponseEntity<List<Album>> getAllAlbumsByGenre(@RequestParam(name = "name") Genre genre ) {
         return new ResponseEntity<>(albumService.getAllAlbumsByGenre(genre),HttpStatus.OK);
 
     }
 
     @GetMapping("/albums/title")
-    public ResponseEntity<Album> getAllAlbumsByYear(@RequestParam(name = "name") String title ) {
+    public ResponseEntity<Album> getAlbumsByTitle(@RequestParam(name = "name") String title ) {
         return new ResponseEntity<>(albumService.getAlbumByName(title),HttpStatus.OK);
 
     }
