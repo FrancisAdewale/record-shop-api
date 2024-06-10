@@ -1,4 +1,4 @@
-package com.northcoders.recordshopapi.model;
+package com.northcoders.recordshopapi;
 
 public enum Genre {
         SOUL,

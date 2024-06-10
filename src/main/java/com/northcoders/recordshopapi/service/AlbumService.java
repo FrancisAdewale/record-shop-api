@@ -1,7 +1,7 @@
 package com.northcoders.recordshopapi.service;
 
 import com.northcoders.recordshopapi.model.Album;
-import com.northcoders.recordshopapi.model.Genre;
+import com.northcoders.recordshopapi.Genre;
 
 import java.util.List;
 

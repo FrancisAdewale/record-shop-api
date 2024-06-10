@@ -1,12 +1,13 @@
 package com.northcoders.recordshopapi.service;
 
+import com.northcoders.recordshopapi.exception.AlbumNotFoundException;
+import com.northcoders.recordshopapi.exception.ArtistNotFoundException;
 import com.northcoders.recordshopapi.model.Album;
-import com.northcoders.recordshopapi.model.Genre;
+import com.northcoders.recordshopapi.Genre;
 import com.northcoders.recordshopapi.repo.AlbumRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -34,12 +35,14 @@ public class AlbumServiceImpl implements AlbumService{
 
     @Override
     public Album getAlbumById(long id) {
-            return albumRepository.findById(id).orElse(null);
+            return albumRepository.findById(id).orElseThrow(() -> new AlbumNotFoundException("Invalid Id: " + id));
     }
 
     @Override
     public List<Album> getAllAlbumsByArtist(String name) {
-        return albumRepository.findByArtistName(name);
+        return albumRepository.findByArtistName(name)
+                .filter(albums -> !albums.isEmpty())
+                .orElseThrow(() -> new AlbumNotFoundException("Invalid artist name: " + name));
     }
 
     @Override

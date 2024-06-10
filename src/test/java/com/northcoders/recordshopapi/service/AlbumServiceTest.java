@@ -1,14 +1,12 @@
 package com.northcoders.recordshopapi.service;
 
 import com.northcoders.recordshopapi.model.Album;
-import com.northcoders.recordshopapi.model.Genre;
+import com.northcoders.recordshopapi.Genre;
 import com.northcoders.recordshopapi.repo.AlbumRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
@@ -83,7 +81,7 @@ public class AlbumServiceTest {
 
         List<Album> mikeAlbums = new ArrayList<>();
         mikeAlbums.add(new Album(3L, "The Wind3", "Mike", Genre.SOUL, LocalDate.of(1999, 12, 12), 9000, 5));
-        when(mockAlbumRepository.findByArtistName("Mike")).thenReturn(mikeAlbums);
+        when(mockAlbumRepository.findByArtistName("Mike")).thenReturn(Optional.of(mikeAlbums));
 
         var actualResult = albumsServiceImpl.getAllAlbumsByArtist("Mike");
 

@@ -1,5 +1,6 @@
 package com.northcoders.recordshopapi.model;
 
+import com.northcoders.recordshopapi.Genre;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
