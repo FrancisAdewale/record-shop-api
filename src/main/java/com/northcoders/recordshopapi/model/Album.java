@@ -22,7 +22,7 @@ public class Album {
     @Column( name = "album_id", updatable = false, nullable = false)
     Long albumId;
 
-    @Column(name = "album_title")
+    @Column(name = "album_title", unique = true)
     String albumTitle;
 
 

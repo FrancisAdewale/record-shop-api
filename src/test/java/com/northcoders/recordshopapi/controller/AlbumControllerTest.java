@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.time.LocalDate;
 import java.util.*;
 
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -200,6 +201,29 @@ public class AlbumControllerTest {
 
         //ASSERT
 
+    }
+
+    @Test
+    @DisplayName("GET /albums/title?name={albumName}")
+    public void testGetAlbumByName() throws Exception {
+
+        // ARRANGE
+        String albumName = "The Wind";
+        Album expectedAlbum = new Album(1L, albumName, "John Doe", Genre.SOUL, LocalDate.of(1999, 12, 12), 9000, 5);
+
+        when(albumServiceImpl.getAlbumByName(albumName)).thenReturn(expectedAlbum);
+
+        // ACT
+        this.mockMvcController.perform(MockMvcRequestBuilders.get("/api/v1/albums/title")
+                        .param("name", albumName))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.albumId").value(expectedAlbum.getAlbumId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.albumTitle").value(expectedAlbum.getAlbumTitle()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.artistName").value(expectedAlbum.getArtistName()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.genre").value(expectedAlbum.getGenre().toString()));
+
+        // ASSERT
+        verify(albumServiceImpl).getAlbumByName(albumName);
     }
 
 }

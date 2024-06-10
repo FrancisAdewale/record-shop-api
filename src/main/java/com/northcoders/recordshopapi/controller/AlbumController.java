@@ -38,4 +38,10 @@ public class AlbumController {
 
     }
 
+    @GetMapping("/albums/title")
+    public ResponseEntity<Album> getAllAlbumsByYear(@RequestParam(name = "name") String title ) {
+        return new ResponseEntity<>(albumService.getAlbumByName(title),HttpStatus.OK);
+
+    }
+
 }

@@ -112,6 +112,28 @@ public class AlbumServiceTest {
 
     }
 
+    @Test
+    public void getAlbumByNameTest() {
+
+        // ARRANGE
+        String albumName = "The Wind";
+        Album expectedAlbum = new Album(1L, albumName, "John Doe", Genre.SOUL, LocalDate.of(1999, 12, 12), 9000, 5);
+
+        when(mockAlbumRepository.findByAlbumTitle(albumName)).thenReturn(Optional.of(expectedAlbum));
+
+        // ACT
+        var actualAlbum = albumsServiceImpl.getAlbumByName(albumName);
+
+        // ASSERT
+        assertThat(actualAlbum).isNotNull();
+        assertThat(actualAlbum.getAlbumId()).isEqualTo(1L);
+        assertThat(actualAlbum.getAlbumTitle()).isEqualTo(albumName);
+        assertThat(actualAlbum.getArtistName()).isEqualTo("John Doe");
+        assertThat(actualAlbum.getGenre()).isEqualTo(Genre.SOUL);
+        assertThat(actualAlbum.getReleaseDate()).isEqualTo(LocalDate.of(1999, 12, 12));
+        assertThat(actualAlbum.getPrice()).isEqualTo(9000);
+    }
+
 
 
 }
