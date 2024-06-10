@@ -178,4 +178,28 @@ public class AlbumControllerTest {
 
     }
 
+
+    @Test
+    @DisplayName("GET /genre?name={}")
+    public void testGetAllAlbumsByGenre() throws Exception {
+
+        List<Album> albumsList = new ArrayList<>();
+        albumsList.add(new Album(1L,"The Wind", "John Doe", Genre.SOUL, LocalDate.of(1999,12,12),9000,5));
+        albumsList.add(new Album(2L,"The Wind2", "John Doe", Genre.SOUL, LocalDate.of(1999,12,12),9000,5));
+        albumsList.add(new Album(3L,"The Wind3", "John Doe", Genre.SOUL, LocalDate.of(1999,12,12),9000,5));
+        albumsList.add(new Album(4L,"The Wind4", "John Doe", Genre.SOUL, LocalDate.of(1999,12,12),9000,5));
+        albumsList.add(new Album(5L,"The Wind5", "John Doe", Genre.SOUL, LocalDate.of(1999,12,12),9000,0));
+        when(albumServiceImpl.getAllAlbumsByGenre(Genre.SOUL)).thenReturn(albumsList);
+        //ACT
+
+        //ACT
+        this.mockMvcController.perform(MockMvcRequestBuilders.get("/api/v1/albums/genre").param("name","SOUL"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[4].genre").value("SOUL"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[4].albumId").value(5));
+
+        //ASSERT
+
+    }
+
 }

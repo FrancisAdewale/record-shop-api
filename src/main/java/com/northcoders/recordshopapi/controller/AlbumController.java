@@ -1,6 +1,7 @@
 package com.northcoders.recordshopapi.controller;
 
 import com.northcoders.recordshopapi.model.Album;
+import com.northcoders.recordshopapi.model.Genre;
 import com.northcoders.recordshopapi.service.AlbumService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,6 +30,12 @@ public class AlbumController {
     @GetMapping("albums/artist")
     public ResponseEntity<List<Album>> getAlLAlbumsByArtist(@RequestParam(name = "name") String name) {
     return new ResponseEntity<>(albumService.getAllAlbumsByArtist(name),HttpStatus.OK);
+    }
+
+    @GetMapping("/albums/genre")
+    public ResponseEntity<List<Album>> getAllAlbumsByYear(@RequestParam(name = "name") Genre genre ) {
+        return new ResponseEntity<>(albumService.getAllAlbumsByGenre(genre),HttpStatus.OK);
+
     }
 
 }

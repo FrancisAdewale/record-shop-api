@@ -92,4 +92,26 @@ public class AlbumServiceTest {
 
     }
 
+    @Test
+    public void getAllAlbumsByGenreTest() {
+
+        List<Album> albumsList = new ArrayList<>();
+        albumsList.add(new Album(1L,"The Wind", "John Doe", Genre.SOUL, LocalDate.of(1999,12,12),9000,5));
+        albumsList.add(new Album(2L,"The Wind2", "John Doe", Genre.SOUL, LocalDate.of(1999,12,12),9000,5));
+        albumsList.add(new Album(3L,"The Wind3", "John Doe", Genre.SOUL, LocalDate.of(1999,12,12),9000,5));
+        albumsList.add(new Album(4L,"The Wind4", "John Doe", Genre.SOUL, LocalDate.of(1999,12,12),9000,5));
+        albumsList.add(new Album(5L,"The Wind4", "John Doe", Genre.SOUL, LocalDate.of(1999,12,12),9000,0));
+        albumsList.add(new Album(6L,"The Wind4", "John Doe", Genre.POP, LocalDate.of(1999,12,12),9000,0));
+
+        when(albumsServiceImpl.getAllAlbumsByGenre(Genre.SOUL)).thenReturn(albumsList.subList(0,5));
+
+        var actualResult = albumsServiceImpl.getAllAlbumsByGenre(Genre.SOUL);
+
+        assertThat(actualResult).hasSize(5);
+
+
+    }
+
+
+
 }

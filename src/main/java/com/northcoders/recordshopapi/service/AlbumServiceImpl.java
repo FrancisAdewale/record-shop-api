@@ -1,12 +1,12 @@
 package com.northcoders.recordshopapi.service;
 
 import com.northcoders.recordshopapi.model.Album;
+import com.northcoders.recordshopapi.model.Genre;
 import com.northcoders.recordshopapi.repo.AlbumRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,5 +42,10 @@ public class AlbumServiceImpl implements AlbumService{
     @Override
     public List<Album> getAllAlbumsByArtist(String name) {
         return albumRepository.findByArtistName(name);
+    }
+
+    @Override
+    public List<Album> getAllAlbumsByGenre(Genre genre) {
+        return albumRepository.findAllByGenre(genre);
     }
 }
