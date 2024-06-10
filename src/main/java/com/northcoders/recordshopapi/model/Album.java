@@ -18,7 +18,7 @@ public class Album {
 
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column( name = "album_id", updatable = false, nullable = false)
     Long albumId;
 

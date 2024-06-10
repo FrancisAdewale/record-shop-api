@@ -57,4 +57,9 @@ public class AlbumServiceImpl implements AlbumService{
         }
         return null;
     }
+
+    @Override
+    public Album postAlbum(Album album) {
+        return albumRepository.save(album);
+    }
 }

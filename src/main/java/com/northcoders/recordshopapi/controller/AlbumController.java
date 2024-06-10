@@ -44,4 +44,11 @@ public class AlbumController {
 
     }
 
+    @PostMapping("/albums")
+    public ResponseEntity<Album> postNewAlbum(@RequestBody Album album) {
+        Album addedAlbum = albumService.postAlbum(album);
+        return new ResponseEntity<>(addedAlbum, HttpStatus.CREATED);
+
+    }
+
 }

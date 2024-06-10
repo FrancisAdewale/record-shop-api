@@ -135,5 +135,24 @@ public class AlbumServiceTest {
     }
 
 
+    @Test
+    public void postALbumTest() {
+
+        Album postAlbum = new Album(1L, "The Wind", "John Doe", Genre.SOUL, LocalDate.of(1999, 12, 12), 9000, 5);
+
+        when(mockAlbumRepository.save(postAlbum)).thenReturn(postAlbum);
+
+        // ACT
+        var actualAlbum = albumsServiceImpl.postAlbum(postAlbum);
+
+        // ASSERT
+        assertThat(actualAlbum).isNotNull();
+        assertThat(actualAlbum.getAlbumId()).isEqualTo(1L);
+        assertThat(actualAlbum.getArtistName()).isEqualTo("John Doe");
+        assertThat(actualAlbum.getGenre()).isEqualTo(Genre.SOUL);
+        assertThat(actualAlbum.getReleaseDate()).isEqualTo(LocalDate.of(1999, 12, 12));
+        assertThat(actualAlbum.getPrice()).isEqualTo(9000);
+    }
+
 
 }

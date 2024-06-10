@@ -13,6 +13,6 @@ public interface AlbumService {
     Album getAlbumById(long id);
     List<Album> getAllAlbumsByArtist(String name);
     List<Album> getAllAlbumsByGenre(Genre genre);
-
     Album getAlbumByName(String albumName);
+    Album postAlbum(Album album);
 }

@@ -13,9 +13,11 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -108,17 +110,14 @@ public class AlbumControllerTest {
     @DisplayName("GET /albums/{id}")
     public void testGetAlbumById() throws Exception {
 
-        //ARRANGE
        Album album =  new Album(1L,"The Wind", "John Doe", Genre.SOUL, LocalDate.of(1999,12,12),9000,5);
 
         when(albumServiceImpl.getAlbumById(1)).thenReturn(album);
-        //ACT
         this.mockMvcController.perform(MockMvcRequestBuilders.get("/api/v1/albums/1"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.albumId").value(1))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.genre").value(Genre.SOUL.name()));
 
-        //ASSERT
 
     }
 
@@ -126,17 +125,14 @@ public class AlbumControllerTest {
     @DisplayName("GET /albums/{id}")
     public void testGetAlbumByWrongId() throws Exception {
 
-        //ARRANGE
         Album album =  new Album(1L,"The Wind", "John Doe", Genre.SOUL, LocalDate.of(1999,12,12),9000,5);
 
         when(albumServiceImpl.getAlbumById(7)).thenReturn(null);
-        //ACT
         this.mockMvcController.perform(MockMvcRequestBuilders.get("/api/v1/albums/7"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().string(""));
 
 
-        //ASSERT
 
     }
 
@@ -144,7 +140,6 @@ public class AlbumControllerTest {
     @DisplayName("GET /albums")
     public void testGetAllAlbumsWithoutParam() throws Exception {
 
-        //ARRANGE
 
         List<Album> albumsList = new ArrayList<>();
         albumsList.add(new Album(1L,"The Wind", "John Doe", Genre.SOUL, LocalDate.of(1999,12,12),9000,5));
@@ -153,11 +148,9 @@ public class AlbumControllerTest {
         albumsList.add(new Album(4L,"The Wind4", "John Doe", Genre.SOUL, LocalDate.of(1999,12,12),9000,5));
         albumsList.add(new Album(5L,"The Wind5", "John Doe", Genre.SOUL, LocalDate.of(1999,12,12),9000,0));
         when(albumServiceImpl.getAllAlbums(false)).thenReturn(albumsList);
-        //ACT
         this.mockMvcController.perform(MockMvcRequestBuilders.get("/api/v1/albums"))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
 
-        //ASSERT
 
     }
 
@@ -165,19 +158,17 @@ public class AlbumControllerTest {
     @DisplayName("GET /artist?name={}")
     public void testGetAllAlbumsByArtist() throws Exception {
 
-        //ARRANGE
         List<Album> mikeAlbums = new ArrayList<>();
         mikeAlbums.add(new Album(3L, "The Wind3", "Mike", Genre.SOUL, LocalDate.of(1999, 12, 12), 9000, 5));
 
         when(albumServiceImpl.getAllAlbumsByArtist("Mike")).thenReturn(mikeAlbums);
-        //ACT
         this.mockMvcController.perform(MockMvcRequestBuilders.get("/api/v1/albums/artist").param("name","Mike"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].artistName").value("Mike"));
 
-        //ASSERT
 
     }
+
 
 
     @Test
@@ -191,15 +182,12 @@ public class AlbumControllerTest {
         albumsList.add(new Album(4L,"The Wind4", "John Doe", Genre.SOUL, LocalDate.of(1999,12,12),9000,5));
         albumsList.add(new Album(5L,"The Wind5", "John Doe", Genre.SOUL, LocalDate.of(1999,12,12),9000,0));
         when(albumServiceImpl.getAllAlbumsByGenre(Genre.SOUL)).thenReturn(albumsList);
-        //ACT
 
-        //ACT
         this.mockMvcController.perform(MockMvcRequestBuilders.get("/api/v1/albums/genre").param("name","SOUL"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$[4].genre").value("SOUL"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[4].albumId").value(5));
 
-        //ASSERT
 
     }
 
@@ -207,13 +195,11 @@ public class AlbumControllerTest {
     @DisplayName("GET /albums/title?name={albumName}")
     public void testGetAlbumByName() throws Exception {
 
-        // ARRANGE
         String albumName = "The Wind";
         Album expectedAlbum = new Album(1L, albumName, "John Doe", Genre.SOUL, LocalDate.of(1999, 12, 12), 9000, 5);
 
         when(albumServiceImpl.getAlbumByName(albumName)).thenReturn(expectedAlbum);
 
-        // ACT
         this.mockMvcController.perform(MockMvcRequestBuilders.get("/api/v1/albums/title")
                         .param("name", albumName))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -222,8 +208,49 @@ public class AlbumControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.artistName").value(expectedAlbum.getArtistName()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.genre").value(expectedAlbum.getGenre().toString()));
 
-        // ASSERT
         verify(albumServiceImpl).getAlbumByName(albumName);
+    }
+
+    @Test
+    @DisplayName("POST /albums")
+    public void testPostAlbum() throws Exception {
+
+
+        Album postAlbum = new Album(1L, "The WInd", "John Doe", Genre.SOUL, LocalDate.of(1999, 12, 12), 9000, 5);
+
+        when(albumServiceImpl.postAlbum(postAlbum)).thenReturn(postAlbum);
+
+        this.mockMvcController.perform(MockMvcRequestBuilders.post("/api/v1/albums").content(mapper.writeValueAsBytes(postAlbum))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.albumId").value(postAlbum.getAlbumId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.albumTitle").value(postAlbum.getAlbumTitle()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.artistName").value(postAlbum.getArtistName()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.genre").value(postAlbum.getGenre().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.price").value(postAlbum.getPrice()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.stockQuantity").value(postAlbum.getStockQuantity()));
+
+    }
+
+
+    @Test
+    @DisplayName("POST /albums")
+    public void testPostAlbumInvalidInput() throws Exception {
+
+String json = "  {\n" +
+        "        \"albd\": 3,\n" +
+        "        \"albumTitle\": \"Album 2\",\n" +
+        "        \"arstName\": \"Artist 2\",\n" +
+        "        \"genre\": \"POP\",\n" +
+        "        \"releasate\": \"2021-02-01\",\n" +
+        "        \"price\": 2000,\n" +
+        "        \"stocQuantity\": 0\n" +
+        "    },";
+
+        this.mockMvcController.perform(MockMvcRequestBuilders.post("/api/v1/albums")
+                        .content(mapper.writeValueAsBytes(json))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
 }
