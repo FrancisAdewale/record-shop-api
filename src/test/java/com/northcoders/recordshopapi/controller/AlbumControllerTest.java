@@ -277,4 +277,16 @@ String json = "  {\n" +
 
     }
 
+    @Test
+    @DisplayName("DELETE /albums/{id}")
+    public void testDeleteAlbum() throws Exception {
+        long albumId = 1L;
+
+        when(albumServiceImpl.deleteAlbumById(albumId)).thenReturn("Album deleted");
+
+        this.mockMvcController.perform(MockMvcRequestBuilders.delete("/api/v1/albums/1"))
+                .andExpect(MockMvcResultMatchers.status().isAccepted())
+                .andExpect(MockMvcResultMatchers.content().string("Album deleted"));
+    }
+
 }

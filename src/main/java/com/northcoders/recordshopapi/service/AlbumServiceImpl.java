@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AlbumServiceImpl implements AlbumService{
@@ -58,5 +59,16 @@ public class AlbumServiceImpl implements AlbumService{
     @Override
     public Album postAlbum(Album album) {
         return albumRepository.save(album);
+    }
+
+    @Override
+    public String deleteAlbumById(long id) {
+        Optional<Album> album = albumRepository.findById(id);
+        if(album.isPresent()) {
+            albumRepository.deleteById(id);
+            return "Album deleted";
+        }
+
+        return "Album does not exist";
     }
 }
