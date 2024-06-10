@@ -51,4 +51,16 @@ public class AlbumController {
 
     }
 
+    @PutMapping("albums/{id}")
+    public ResponseEntity<Album> updateAlbum(@RequestBody Album album, @PathVariable long id) {
+        Album dbAlbum = albumService.getAlbumById(id);
+        dbAlbum.setAlbumTitle(album.getAlbumTitle());
+        dbAlbum.setPrice(album.getPrice());
+        dbAlbum.setGenre(album.getGenre());
+        dbAlbum.setStockQuantity(album.getStockQuantity());
+        dbAlbum.setArtistName(album.getArtistName());
+        dbAlbum.setReleaseDate(album.getReleaseDate());
+        return new ResponseEntity<>(albumService.postAlbum(dbAlbum),HttpStatus.ACCEPTED);
+    }
+
 }

@@ -253,4 +253,28 @@ String json = "  {\n" +
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
+    @Test
+    @DisplayName("PUT /albums/{id}")
+    public void testPutAlbum() throws Exception {
+
+        Album album = new Album(1L, "The WInd", "John Doe", Genre.SOUL, LocalDate.of(1999, 12, 12), 9000, 5);
+
+
+        Album putAlbum = new Album(1L, "The WIndUpdate", "John Doeupdate", Genre.SOUL, LocalDate.of(1999, 12, 12), 9000, 5);
+
+        when(albumServiceImpl.getAlbumById(1)).thenReturn(album);
+        when(albumServiceImpl.postAlbum(putAlbum)).thenReturn(putAlbum);
+
+        this.mockMvcController.perform(MockMvcRequestBuilders.put("/api/v1/albums/1").content(mapper.writeValueAsBytes(putAlbum))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isAccepted())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.albumId").value(putAlbum.getAlbumId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.albumTitle").value(putAlbum.getAlbumTitle()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.artistName").value(putAlbum.getArtistName()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.genre").value(putAlbum.getGenre().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.price").value(putAlbum.getPrice()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.stockQuantity").value(putAlbum.getStockQuantity()));
+
+    }
+
 }

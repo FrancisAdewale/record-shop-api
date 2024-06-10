@@ -115,16 +115,13 @@ public class AlbumServiceTest {
     @Test
     public void getAlbumByNameTest() {
 
-        // ARRANGE
         String albumName = "The Wind";
         Album expectedAlbum = new Album(1L, albumName, "John Doe", Genre.SOUL, LocalDate.of(1999, 12, 12), 9000, 5);
 
         when(mockAlbumRepository.findByAlbumTitle(albumName)).thenReturn(Optional.of(expectedAlbum));
 
-        // ACT
         var actualAlbum = albumsServiceImpl.getAlbumByName(albumName);
 
-        // ASSERT
         assertThat(actualAlbum).isNotNull();
         assertThat(actualAlbum.getAlbumId()).isEqualTo(1L);
         assertThat(actualAlbum.getAlbumTitle()).isEqualTo(albumName);
@@ -142,16 +139,32 @@ public class AlbumServiceTest {
 
         when(mockAlbumRepository.save(postAlbum)).thenReturn(postAlbum);
 
-        // ACT
         var actualAlbum = albumsServiceImpl.postAlbum(postAlbum);
 
-        // ASSERT
         assertThat(actualAlbum).isNotNull();
         assertThat(actualAlbum.getAlbumId()).isEqualTo(1L);
         assertThat(actualAlbum.getArtistName()).isEqualTo("John Doe");
         assertThat(actualAlbum.getGenre()).isEqualTo(Genre.SOUL);
         assertThat(actualAlbum.getReleaseDate()).isEqualTo(LocalDate.of(1999, 12, 12));
         assertThat(actualAlbum.getPrice()).isEqualTo(9000);
+    }
+
+    @Test
+    public void putALbumTest() {
+
+        Album album = new Album(1L, "The Wind", "John Doe", Genre.SOUL, LocalDate.of(1999, 12, 12), 9000, 5);
+        Album putAlbum = new Album(1L, "The WIndUpdate", "John Doeupdate", Genre.SOUL, LocalDate.of(1999, 12, 12), 9000, 5);
+
+
+        when(mockAlbumRepository.findById(1L)).thenReturn(Optional.of(album));
+        when(mockAlbumRepository.save(putAlbum)).thenReturn(putAlbum);
+
+        var actualAlbum = albumsServiceImpl.postAlbum(putAlbum);
+
+        assertThat(actualAlbum).isNotNull();
+        assertThat(actualAlbum.getAlbumId()).isEqualTo(1L);
+        assertThat(actualAlbum.getArtistName()).isEqualTo(putAlbum.getArtistName());
+        assertThat(actualAlbum.getGenre()).isEqualTo(putAlbum.getGenre());
     }
 
 
