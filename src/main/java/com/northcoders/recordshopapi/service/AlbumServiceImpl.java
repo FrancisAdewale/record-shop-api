@@ -4,14 +4,21 @@ import com.northcoders.recordshopapi.exception.AlbumNotFoundException;
 import com.northcoders.recordshopapi.model.Album;
 import com.northcoders.recordshopapi.Genre;
 import com.northcoders.recordshopapi.repo.AlbumRepository;
+import jakarta.persistence.Cacheable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+//@CacheConfig(cacheNames = "album")
 public class AlbumServiceImpl implements AlbumService{
 
     @Autowired
@@ -33,7 +40,10 @@ public class AlbumServiceImpl implements AlbumService{
 
     }
 
-    @Override
+//    @Caching(evict = {@CacheEvict(value = "albumcache", key = "#album.album_id")
+//    })
+@CachePut(value="album")
+@Override
     public Album getAlbumById(long id) {
             return albumRepository.findById(id).orElseThrow(() -> new AlbumNotFoundException("Invalid Id: " + id));
     }
@@ -72,5 +82,12 @@ public class AlbumServiceImpl implements AlbumService{
             throw new AlbumNotFoundException("Can't find album Id: " + id);
         }
 
+    }
+
+    @Override
+    public List<Album> getAlbumsByYear(int year) {
+        LocalDate startDate = LocalDate.of(year, 1, 1);
+        LocalDate endDate = LocalDate.of(year, 12, 31);
+        return albumRepository.findByReleaseDateBetween(startDate, endDate);
     }
 }

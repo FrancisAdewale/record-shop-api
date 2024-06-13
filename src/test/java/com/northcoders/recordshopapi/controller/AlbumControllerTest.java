@@ -287,4 +287,22 @@ String json = "  {\n" +
                 .andExpect(MockMvcResultMatchers.content().string("Album deleted"));
     }
 
+    @Test
+    public void testGetAllAlbumsByYear() throws Exception {
+        int year = 2023;
+        List<Album> albums = Arrays.asList(
+                new Album(1L, "Album 1", "Artist 1", Genre.ROCK, LocalDate.of(2023, 3, 1), 20, 100),
+                new Album(2L, "Album 2", "Artist 2", Genre.POP, LocalDate.of(2023, 5, 10), 25, 200)
+        );
+
+        when(albumServiceImpl.getAlbumsByYear(year)).thenReturn(albums);
+
+        mockMvcController.perform(MockMvcRequestBuilders.get("/api/v1/albums/year")
+                        .param("equals",String.valueOf(year))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].albumTitle").value("Album 1"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].albumTitle").value("Album 2"));
+    }
+
 }
