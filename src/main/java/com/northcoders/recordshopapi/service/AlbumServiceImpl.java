@@ -62,9 +62,8 @@ public class AlbumServiceImpl implements AlbumService{
 
     @Override
     public Album getAlbumByName(String albumName) {
-            return albumRepository.findByAlbumTitle(albumName)
-                    .orElseThrow(() -> new AlbumNotFoundException("Can't find album name: " + albumName));
-
+            Optional<Album> album = albumRepository.findByAlbumTitle(albumName);
+            return album.orElseThrow(() -> new AlbumNotFoundException("album title does not exist:" + albumName));
     }
 
     @Override
