@@ -14,5 +14,5 @@ public interface AlbumRepository extends CrudRepository<Album,Long> {
     Optional<List<Album>> findByArtistName(String artistName);
     Optional<List<Album>> findAllByGenre(Genre genre);
     Optional<Album> findByAlbumTitle(String title);
-    List<Album> findByReleaseDateBetween(LocalDate startDate, LocalDate endDate);
+    Optional<List<Album>> findByReleaseDateBetween(LocalDate startDate, LocalDate endDate);
 }

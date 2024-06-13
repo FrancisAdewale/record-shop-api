@@ -88,6 +88,10 @@ public class AlbumServiceImpl implements AlbumService{
     public List<Album> getAlbumsByYear(int year) {
         LocalDate startDate = LocalDate.of(year, 1, 1);
         LocalDate endDate = LocalDate.of(year, 12, 31);
-        return albumRepository.findByReleaseDateBetween(startDate, endDate);
+        List<Album> albums = albumRepository.findByReleaseDateBetween(startDate, endDate).get();
+        if (albums.isEmpty()) {
+            throw new AlbumNotFoundException("No albums exist with that year: " + year);
+        }
+        return albums;
     }
 }
