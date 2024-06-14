@@ -1,5 +1,6 @@
 package com.northcoders.recordshopapi.controller;
 
+import com.northcoders.recordshopapi.exception.AlbumNotFoundException;
 import com.northcoders.recordshopapi.model.Album;
 import com.northcoders.recordshopapi.Genre;
 import com.northcoders.recordshopapi.service.AlbumService;
@@ -35,8 +36,14 @@ public class AlbumController {
     }
 
     @GetMapping("/albums/genre")
-    public ResponseEntity<List<Album>> getAllAlbumsByGenre(@RequestParam(name = "name") Genre genre ) {
-        return new ResponseEntity<>(albumService.getAllAlbumsByGenre(genre),HttpStatus.OK);
+    public ResponseEntity<List<Album>> getAllAlbumsByGenre(@RequestParam(name = "name") String genre ) {
+        try {
+            Genre genreEnum = Genre.valueOf(genre.toUpperCase());
+            List<Album> albums = albumService.getAllAlbumsByGenre(genreEnum);
+            return new ResponseEntity<>(albums, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            throw new AlbumNotFoundException("Invalid genre type: " + genre);
+        }
 
     }
 

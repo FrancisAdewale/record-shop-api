@@ -10,6 +10,7 @@ import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Caching;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -42,8 +43,7 @@ public class AlbumServiceImpl implements AlbumService{
 
 //    @Caching(evict = {@CacheEvict(value = "albumcache", key = "#album.album_id")
 //    })
-@CachePut(value="album")
-@Override
+@CachePut(value = "album", key = "#id")@Override
     public Album getAlbumById(long id) {
             return albumRepository.findById(id).orElseThrow(() -> new AlbumNotFoundException("Invalid Id: " + id));
     }
@@ -57,7 +57,8 @@ public class AlbumServiceImpl implements AlbumService{
 
     @Override
     public List<Album> getAllAlbumsByGenre(Genre genre) {
-        return albumRepository.findAllByGenre(genre).get();
+
+        return albumRepository.findAllByGenre(genre).orElseThrow(() -> new AlbumNotFoundException("Invalid Genre Name"));
     }
 
     @Override
@@ -68,7 +69,13 @@ public class AlbumServiceImpl implements AlbumService{
 
     @Override
     public Album postAlbum(Album album) {
-        return albumRepository.save(album);
+
+        try {
+            return albumRepository.save(album);
+        } catch (DataAccessException e) {
+            // Optionally, wrap the exception into a custom exception
+            throw new AlbumNotFoundException("Failed to save album: " + e.getMessage());
+        }
     }
 
     @Override
